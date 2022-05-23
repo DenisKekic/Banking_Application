@@ -9,6 +9,7 @@ public class BankAccount {
 
     private String name;
     private int id;
+    private String lines = "______________________________________________________________";
 
     public BankAccount(String name, int id) {
         this.name = name;
@@ -47,17 +48,24 @@ public class BankAccount {
     }
 
     public void withdraw(double amount){
-        if(amount != 0){
+        if(amount != 0 && amount <= this.balance){
             balance = balance - amount;
             previousTransaction = -amount;
+            System.out.println(lines);
+            System.out.println("Die Summe " + amount + " wurde erfolgreich überwiesen.");
+            System.out.println(lines);
+        }
+        else{
+            System.out.println(lines);
+            System.out.println("Nicht genuegend Geld auf dem Konto!");
+            System.out.println(lines);
         }
     }
 
     public void output(){
 
-        char c = '\0';
+        char input = '\0';
         double money = 0.0;
-        String lines = "______________________________________________________________";
 
         do{
             System.out.println("Daten:");
@@ -77,9 +85,10 @@ public class BankAccount {
 
             System.out.println("Geben Sie einen Befehl ein: ");
 
-            c = scanner.next().charAt(0);
+            input = scanner.next().charAt(0);
+            input = Character.toUpperCase(input);
 
-            switch (c){
+            switch (input){
                 case 'A':
                     System.out.println(lines);
                     System.out.println("Your current balance is: " + this.getBalance());
@@ -99,9 +108,7 @@ public class BankAccount {
                     System.out.println("Geben Sie die Summe ein die abgehoben werden soll:");
                     money = scanner.nextDouble();
                     withdraw(money);
-                    System.out.println(lines);
-                    System.out.println("Die Summe " + money + " wurde erfolgreich überwiesen.");
-                    System.out.println(lines);
+
                     break;
                 case 'D':
                     getPreviousTransaction();
@@ -109,8 +116,13 @@ public class BankAccount {
                     break;
                 case 'E':
                     break;
+                default:
+                    System.out.println("Ungueltige Eingabe! Bitte erneut eingeben: ");
+                    break;
             }
 
-        }while (c != 'E');
+        }while (input != 'E');
+
+        System.out.println("\nAuf Wiedersehen!");
     }
 }
